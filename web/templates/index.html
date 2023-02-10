@@ -1,0 +1,51 @@
+{%extends 'base.html'%}
+
+{%block body_block%}
+<h1>Welcome</h1>
+
+
+<!-- post list starts -->
+<div class="row gx-4 gx-lg-5 justify-content-center">
+    {%for p in posts%}
+    <div class="col-md-10 col-lg-8 col-xl-7">
+        <!-- Post preview-->
+        <div class="post-preview">
+
+            {%if p.image%}
+            <div>
+                <img src="{{p.image.url}}" alt="" class="w-100">
+            </div>
+            {%endif%}
+            <a href="post.html">
+                <h2 class="post-title">{{p.title}}</h2>
+                
+            </a>
+            <p class="post-meta">
+                Posted by
+                <a href="#!">{{p.user}}</a>
+                on {{p.created_date}}
+            </p>
+        </div>
+        <div>
+            <form action="{%url 'add-comment' p.id %}" method="post">
+                {%csrf_token%}
+                <input type="text" placeholder="add your comment" name="comment" class="form-control">
+                <button type="submit" class="btn btn-outline-info mt-2 btn-sm">add</button>
+            </form>
+        </div>
+        <h5 class="post-title">Comments</h5>
+        {%for cmt in p.post_cmts%}
+        <div class="border rounded-pill border-success mt-2 p-2">
+            Comment={{cmt}}
+            User={{cmt.user}}
+            Date={{cmt.created_date}}
+            Votecount={{cmt.likecount}}
+            <a href="{%url 'add-like' cmt.id %}" class="btn btn-warning btn-sm">like</a>
+        </div>
+        {%endfor%}
+        <hr class="my-4" />
+    </div>
+    {%endfor%}
+</div>
+<!-- post list ends -->
+{%endblock%}
